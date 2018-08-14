@@ -67,7 +67,7 @@ class Search extends React.Component {
     render() {
         return (
             <div>
-                <h1 style={{'font-size': 3+'vw'}}>Search for Game of Thrones characters</h1>
+                <h1 style={{'fontSize': 3+'vw'}}>Search for Game of Thrones houses</h1>
                 <input
                     type="text"
                     value={this.state.value}
