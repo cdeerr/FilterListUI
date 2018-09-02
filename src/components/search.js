@@ -1,7 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 
-let listPath = 'http://localhost:50209/api/gameofthrones/houses';
+//let listPath;
+
+const listDomain = 'http://localhost:50209/api/gameofthrones/';
+const defaultEndpoint = 'houses';
+// let listPath = 'http://localhost:50209/api/gameofthrones/books;
+// let listPath = 'http://localhost:50209/api/gameofthrones/characters;
 
 class Search extends React.Component {
     constructor(props) {
@@ -15,7 +20,8 @@ class Search extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount() {
+    fetchData = (endpoint) => {
+        const listPath = listDomain + endpoint;
         axios.get(listPath)
           .then(response => {
             console.log("Response: " + JSON.stringify(response));
@@ -27,6 +33,10 @@ class Search extends React.Component {
           .catch(error => {
               console.log(error);
           });
+    }
+
+    componentDidMount() {
+        this.fetchData(defaultEndpoint);
     }
 
     mapList = () => {
@@ -64,10 +74,32 @@ class Search extends React.Component {
         });
     }
 
+    changeAndFetchList = event => {
+        event.preventDefault();
+        const endpoint = event.target.value.toLowerCase();
+        //could be streamlined with a check to see if the same button was clicked twice, if so, don't make a GET request
+        this.fetchData(endpoint);
+    }
+
     render() {
         return (
             <div>
-                <h1 style={{'fontSize': 3+'vw'}}>Search for Game of Thrones houses</h1>
+                <h1 style={{'fontSize': 3+'vw'}}>Search for Game of Thrones houses, books, or characters!</h1>
+                <button
+                  onClick={(event) => this.changeAndFetchList(event)}
+                  value='houses'>
+                  Houses
+                </button>
+                <button
+                  onClick={(event) => this.changeAndFetchList(event)}
+                  value='books'>
+                  Books
+                </button>
+                <button
+                  onClick={(event) => this.changeAndFetchList(event)}
+                  value='characters'>
+                  Characters
+                </button>
                 <input
                     type="text"
                     value={this.state.value}
